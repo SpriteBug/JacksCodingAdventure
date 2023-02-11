@@ -1,0 +1,63 @@
+//Program04
+//John Braman 02/10/2023
+// COSC 1030 Section 11 Spring 2023
+
+#include <iostream>
+using std::cout;
+using std::cin;
+using std::endl;
+
+
+int myPrompt(void)
+{
+	int num;
+	cout << "Enter a non negative number (-9999 to end it): ";
+	cin >> num;
+	while (num < 0 && num != -9999)
+	{
+		cout << "Enter a non negative number (-9999 to end it): ";
+		cin >> num;
+	}
+	return num;
+}
+int mySum(int num)
+{
+	return num * (num + 1) / 2;
+}
+int myFact(int num)
+{
+	if (num == 0)
+		return 1;
+	return num * myFact(num - 1);
+}
+int myMod(int num)
+{
+	return num % 13;
+}
+void myPrint(int num, int answer)
+{
+	if (num < 10)
+		cout << " The product from 1 to " << num << " is " << answer << endl;
+	else if (num < 46)
+		cout << "The sum from 1 to " << num << " is " << answer << endl;
+	else
+		cout << "the remainder of " << num << " / 13 is " << answer << endl;
+}
+
+int main()
+{
+	while (true)
+	{
+		int input = myPrompt();
+		if (input == -9999)
+			return 0;
+		int result;
+		if (input < 10)
+			result = myFact(input);
+		else if (input < 46)
+			result = mySum(input);
+		else
+			result = myMod(input);
+		myPrint(input, result);
+	}
+}
