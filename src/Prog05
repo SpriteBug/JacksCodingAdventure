@@ -1,0 +1,54 @@
+//Program05
+//John Braman 02/24/2023
+// COSC 1030 Section 11 Spring 2023
+
+
+#include<iostream>
+#include<iomanip>
+using std::cout;
+using std::cin;
+using std::endl;
+using std::showpoint;
+using std::setprecision;
+
+double answer(double mult, double p_advance);
+double numer(double p_advance);
+
+int main()
+{
+	double product, sum, addition = 0.0, overall;
+	int num;
+	do {
+		cout << "Enter maximum value of k in truncated series (non-negative please): ";
+		cin >> num;
+	} while (num < 0);
+	double i = 0;
+	while (i != (num + 1.0)) {
+		product = numer(i);
+		sum = answer(product, i);
+		addition += sum;
+		i += 1.0;
+	}
+	overall = 4.0 * addition;
+	cout << setprecision(14) << "Approximation of pi is " << showpoint << overall << endl;
+}
+
+
+double answer(double product, double p_advance)
+{
+	double sum, mult, add;
+	mult = 2.0 * p_advance;
+	add = mult + 1.0;
+	sum = (product / add);
+	return sum;
+}
+
+double numer(double p_advance)
+{
+	double product = 1.0;
+	for (double i = 0; i < p_advance; i++) {
+		product *= -1.0;
+	}
+	return product;
+}
+
