@@ -1,0 +1,49 @@
+//Lab07
+//John Braman
+//COSC 1030 Section 11
+//Mar 07 2023
+
+
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+using std::cout;
+using std::cin;
+using std::ifstream;
+using std::ofstream;
+
+
+using namespace std;
+int main()
+{
+	ifstream file1;
+	string line;
+	char fileName[45];
+	while (true) {
+		cout << "Enter the first file name (I will transfer the contents to the second file): ";
+		cin >> fileName;
+		file1.open(fileName); 
+		if (file1.is_open()) 
+		{
+			cout << "Enter the second file name: ";
+			cin >> fileName;
+			ofstream writer(fileName); 
+			while (getline(file1, line, '\n')) { 
+				writer << line << endl;
+			}
+			file1.close(); 
+			writer.close(); 
+			cout << "****Done Copying****" << endl;
+			break;
+		}
+		else
+		{
+			cout << "Sorry I cannot find that file. Please re-enter the file name." << endl;
+		}
+	}
+
+
+	return 0;
+}
