@@ -1,0 +1,96 @@
+///Header FIle
+
+// DWallVol.hpp
+// John Braman
+// COSC 1030 Spring 2023 Section 11
+// Program 06
+// March 3, 2023
+// Declarations (prototypes) for some
+// simple volume functions.
+// To ensure declarations aren’t repeated.
+
+#ifndef DWALLVOL_H
+#define DWALLVOL_H
+
+double cylinderVolume(double h, double d);
+double tankWallVolume(double h, double d, double t);
+#endif
+
+
+///Source File 1
+
+/DWallVol.cpp
+// John Braman
+// COSC 1030 Spring 2023 Section 11
+// Program 06
+// March 3, 2023
+
+
+#include "DWallVol.hpp"
+#include <cmath>
+
+//Calculations for inside cylinder volume
+double cylinderVolume(double h, double d) {
+	double PI = atan(1) * 4;
+	double radius = d / 2.0;
+	return PI * radius * radius * h;
+
+}
+
+//Calculations for volume of the tank wall
+double tankWallVolume(double h, double d, double t) {
+	double PI = atan(1) * 4;
+	double wRadius = d / 2;
+	double vHollow = h * PI * (wRadius - t) * (wRadius - t);
+	double vWall = cylinderVolume(h, d) - (vHollow);
+	return vWall;
+}
+
+///Source File 2
+
+//Prog06
+// John Braman
+// COSC 1030 Spring 2023 Section 11
+// Program 06
+// March 3, 2023
+
+#include <iostream>
+#include "DWallVol.hpp"
+using namespace std;
+
+int main()
+{
+	double d, t, h;
+	
+	//Getting user input for height & repeating if invalid input
+	cout << "Enter the height (cm) of the tank (>=0): ";
+	cin >> h;
+	while (h <= 0)
+	{
+		cout << "Enter the height (cm) of the tank (>=0): ";
+		cin >> h;
+	}
+	
+	//Getting user input for diamter & repeating if invalid input
+	cout << "Enter the diameter(cm) of the tank(>= 0) : ";
+	cin >> d;
+	while (d <= 0)
+	{
+		cout << "Enter the diameter (cm) of the tank (>=0): ";
+		cin >> d;
+	}
+	//Getting user input for thickness & repeating if invalid input
+	cout << "Enter the thickness (cm) of the tank wall (0 <= t <=1): ";
+	cin >> t;
+	while (t <= 0 && t > 1)
+	{
+		cout << "Enter the thickness (cm) of the tank wall (0 <= t <=1): ";
+		cin >> t;
+	}
+	
+	//Printing out the calculations
+	cout << "A tank of height " << h << " cm and diameter " << d << " cm" << endl;
+	cout << "with a wall thickness of " << t << " cm" << endl;
+	cout << "has a total wall volume of " << tankWallVolume(h, d, t) << " cubic cm." << endl;
+
+}
