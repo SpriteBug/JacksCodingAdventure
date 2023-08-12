@@ -1,0 +1,106 @@
+// Header File
+
+#ifndef THREEDVEC_HPP
+#define THREEDVEC_HPP
+
+#include <iostream>
+#include <cmath>
+
+class ThreeDVec {
+public:
+	ThreeDVec();
+	ThreeDVec(double x, double y, double z);
+	double mag() const;
+	friend std::ostream& operator<<(std::ostream& os, const ThreeDVec& v);
+	friend std::istream& operator>>(std::istream& is, ThreeDVec& v);
+	ThreeDVec operator+(const ThreeDVec& v) const;
+	double operator*(const ThreeDVec& v) const;
+	ThreeDVec operator^(const ThreeDVec& v) const;
+	ThreeDVec operator*(double k) const;
+
+private:
+	double x, y, z;
+};
+
+#endif
+
+//Source Code 1
+
+// John Braman
+// Prog13
+// April 28 2023
+// COSC 1030 Section 11
+
+
+
+#include <iostream>
+using std::cout;
+using std::cin;
+using std::endl;
+
+#include "ThreeDVec.hpp"
+
+int main()
+{
+	ThreeDVec A;
+	cout << "A is " << A << endl << endl;
+	ThreeDVec X(1, 0, 0), Y(0, 1, 0), Z(0, 0, 1);
+	cout << "X+Y+Z is " << X + Y + Z << endl << endl;
+
+	ThreeDVec B(3, 4, 5);
+	cout << "B is " << B << endl;
+	cout << "||B|| is " << B.mag() << endl;
+	cout << "B dot Y is " << B * Y << endl << endl;;
+
+	ThreeDVec C(X + Y + Z);
+	cout << "C is " << C << endl;
+	cout << "B cross C is " << (B ^ C) << endl;
+	cout << "B dot (B cross C) is " << B * (B ^ C) << endl << endl;
+
+	ThreeDVec D;
+	cout << "Enter your vector coefficients as x y z:  ";
+	cin >> D;
+	cout << "D is " << D << " with magnitude " << D.mag() << endl;
+	ThreeDVec E = D * (1 / D.mag());  // This is a scalar multiplying a vector
+	cout << "Normalized D is |" << E << "| = " << E.mag() << endl << endl;
+
+	return 0;
+}
+
+//Source Code 2
+
+#include "ThreeDVec.hpp"
+
+ThreeDVec::ThreeDVec() : x(0), y(0), z(0) {}
+
+ThreeDVec::ThreeDVec(double x, double y, double z) : x(x), y(y), z(z) {}
+
+double ThreeDVec::mag() const {
+	return std::sqrt(x * x + y * y + z * z);
+}
+
+std::ostream& operator<<(std::ostream& os, const ThreeDVec& v) {
+	os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+	return os;
+}
+
+std::istream& operator>>(std::istream& is, ThreeDVec& v) {
+	is >> v.x >> v.y >> v.z;
+	return is;
+}
+
+ThreeDVec ThreeDVec::operator+(const ThreeDVec& v) const {
+	return ThreeDVec(x + v.x, y + v.y, z + v.z);
+}
+
+double ThreeDVec::operator*(const ThreeDVec& v) const {
+	return x * v.x + y * v.y + z * v.z;
+}
+
+ThreeDVec ThreeDVec::operator^(const ThreeDVec& v) const {
+	return ThreeDVec(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
+}
+
+ThreeDVec ThreeDVec::operator*(double k) const {
+	return ThreeDVec(x * k, y * k, z * k);
+}
