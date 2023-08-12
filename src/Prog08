@@ -1,0 +1,134 @@
+//Header File 1
+
+//John Braman
+//Prog09
+//COSC 1030 Section 11
+//March 31 2023
+
+#ifndef DISPLAYARRAY_H
+#define DISPLAYARRAY_H
+
+template<typename A>
+void DisplayArray(const A data[], int arraySize)
+{
+    for (int i = 0; i < arraySize; i++) {
+        cout << data[i] << "    ";
+    }
+}
+#endif
+
+//Header File 2
+
+#ifndef LLPARAMS_H
+
+#define LLPARAMS_H
+
+void LLParams(const double x[], // Array of x values
+
+	const double y[], // Array of y values
+
+	int n, // Length of input arrays
+
+	double& m, // Linear least square slope of line fit
+
+	double& b); // Linear least square y-intercept
+
+#endif
+
+
+
+
+
+
+
+
+//Source Code 1
+
+// FiboImps.cpp
+// John Braman
+// COSC 1030
+// Section 11
+
+unsigned long int FiboRecursive(int n)
+{
+	if (n <= 0) {
+		return 0;
+	}
+	else if (n == 1) {
+		return 1;
+	}
+	else {
+		return FiboRecursive(n - 2) + FiboRecursive(n - 1);
+	}
+}
+unsigned long int FiboIterative(int n)
+{
+	long int result = 1;
+	long int previous = -1;
+	for (int i = 0; i <= n; i++) {
+		long int sum = result + previous;
+		previous = result;
+		result = sum;
+	}
+	return result;
+}
+
+// SOurce Code 2
+
+// John Braman
+// Program 08
+// 02/24/2023
+// COSC 1030 Section 11
+
+#include <iostream>
+
+using std::cout;
+using std::endl;
+#include <iomanip>
+using std::setfill;
+using std::setw;
+#include "FiboImps.h"
+#include <windows.h>
+const int MAXN(45);
+int main()
+{
+	double sum = 0;
+	double add = 1;
+
+
+	long long int begin = GetTickCount();
+
+	int iterations = 1000 * 1000 * 1000;
+	for (int i = 0; i < iterations; i++) {
+		sum += add;
+		add /= 2.0;
+	}
+
+	long long int end = GetTickCount();
+	double elapsed = (end - begin) * 1e-3;
+
+
+
+	unsigned long int before, after, diff, result, range;
+	cout << "Execution time for Fibonacci no. implementions (ms)\n";
+	cout << setfill('+') << setw(64) << "+" << endl << setfill(' ');
+	cout << setw(4) << "n" << setw(30) << "Recursive"
+		<< setw(30) << "Iterative" << endl;
+	cout << setfill('+') << setw(64) << "+" << endl << setfill(' ');
+	for (int n = 0; n <= MAXN; n++) {
+		cout << setw(4) << n;
+		before = GetTickCount();
+		result = FiboRecursive(n);
+
+		after = GetTickCount();
+		diff = after - before;
+		cout << setw(20) << result << setw(10) << "(0 --- " << elapsed << ")" << setw(10) << diff;
+		before = GetTickCount();
+		result = FiboIterative(n);
+		after = GetTickCount();
+		diff = after - before;
+		cout << setw(20) << result << setw(10) << "(0 --- " << elapsed << ")" << setw(10) << diff;
+		cout << endl;
+	}
+	return 0;
+}
