@@ -1,0 +1,279 @@
+// Header File 1
+
+// Circle.hpp
+// John Braman
+// COSC 1030 Section 11
+// Program 12
+
+
+#ifndef CIRCLE_H
+#define CIRCLE_H
+
+#include <cmath>
+#include "TwoDShape.hpp"
+#include "Point.hpp"
+
+class Circle : public TwoDShape
+{
+public:
+
+    Circle(double dradius = 0, Point refp = Point(0, 0), double dangle = 0)
+        : TwoDShape(refp, dangle), radius(dradius) {
+        name = "circle";
+    }
+
+    Circle(const Circle& circ)
+        : TwoDShape(circ.refpoint, circ.angle), radius(circ.radius)
+    {
+        name = "circle";
+    }
+
+    ~Circle() { }
+
+    virtual void setRadius(double dradius)
+    {
+        radius = (dradius < 0) ? 0 : dradius;
+    }
+
+    virtual double getRadius() const { return radius; }
+
+    virtual double getPerimeter() const
+    {
+        return 2 * atan2(1.0, 1.0) * 4 * radius;
+    }
+
+    virtual double getArea() const
+    {
+        return atan2(1.0, 1.0) * 4 * radius * radius;
+    }
+
+protected:
+
+    double radius;
+};
+#endif
+
+
+// Header File 2
+
+// EqTriangle.hpp
+// John Braman
+// COSC 1030 Section 11
+// Program 12
+
+#ifndef EQTRIANGLE_HPP
+#define EQTRIANGLE_HPP
+
+#include "TwoDShape.hpp"
+
+class EqTriangle : public TwoDShape {
+public:
+    EqTriangle(double side) : side_(side) {} // constructor defined inline
+    virtual double getArea() const override {
+        return side_ * side_ * sqrt(3) / 4;
+    }
+    virtual double getPerimeter() const override {
+        return 3 * side_;
+    }
+private:
+    double side_;
+};
+
+#endif
+
+// Header File 3
+
+// Point.hpp
+// John Braman
+// COSC 1030 Section 11
+// Program 12
+#ifndef POINT_H
+#define POINT_H
+
+//
+// Do not really need a destructor, nothing allocated and I am not extending
+// this object.
+//
+class Point {
+public:
+
+	Point(double dx = 0, double dy = 0) : x(dx), y(dy) {}
+
+	Point(const Point& dpt) : x(dpt.getX()), y(dpt.getY()) {}
+
+	void setX(double dx) { x = dx; }
+
+	double getX() const { return x; }
+
+	void setY(double dy) { y = dy; }
+
+	double getY() const { return y; }
+
+private:
+
+	double x;
+	double y;
+};
+
+#endif
+
+// Header File 4
+
+// Square.hpp
+// John Braman
+// COSC 1030 Section 11
+// Program 12
+
+
+#ifndef SQUARE_H
+#define SQUARE_H
+
+#include "TwoDShape.hpp"
+#include "Point.hpp"
+
+class Square : public TwoDShape
+{
+public:
+
+    Square(double dside = 0, Point refp = Point(0, 0), double dangle = 0)
+        : TwoDShape(refp, dangle), side(dside) {
+        name = "square";
+    }
+
+    Square(const Square& square)
+        : TwoDShape(square.refpoint, square.angle), side(square.side)
+    {
+        name = "square";
+    }
+
+    virtual ~Square() { }
+
+    virtual void setSide(double dside)
+    {
+        side = (dside < 0) ? 0 : dside;
+    }
+
+    virtual double getSide() const { return side; }
+
+    virtual double getPerimeter() const
+    {
+        return 4 * side;
+    }
+
+    virtual double getArea() const
+    {
+        return side * side;
+    }
+
+protected:
+
+    double side;
+};
+#endif
+
+
+// Header File 5
+
+// TwoDShape.hpp
+// John Braman
+// COSC 1030 Section 11
+// Program 12
+
+
+#ifndef TWODSHAPE_H
+#define TWODSHAPE_H
+
+#include<iostream>
+using std::endl;
+using std::cout;
+#include <string> // the standard C++ version of the string
+using std::string;
+#include "Point.hpp"
+
+class TwoDShape {
+public:
+
+    TwoDShape(Point refp = Point(0, 0), double dangle = 0)
+        : refpoint(refp), angle(dangle) {
+        name = "2-D shape";
+    }
+
+    virtual ~TwoDShape() { }
+
+    virtual string getName() const { return name; }
+
+    virtual void setRefPoint(Point refp) { refpoint = refp; }
+
+    virtual Point getRefPoint() const { return refpoint; }
+
+    virtual void setAngle(double dangle) { angle = dangle; }
+
+    virtual double getAngle() const { return angle; }
+
+    virtual void rotate(double delangle) { angle = angle + delangle; }
+
+    virtual double getPerimeter() const = 0; // This makes it Abstract!
+
+    virtual double getArea() const = 0; // Not to mention this one.
+
+protected:
+
+    Point refpoint;
+    double angle;
+    string name;
+};
+
+#endif
+
+
+// Source Code
+
+#include <iostream>
+using std::cout;
+using std::endl;
+
+#include "Circle.hpp"
+#include "Square.hpp"
+#include "EqTriangle.hpp"
+
+// These are the STL elements we will use.
+#include <vector>
+using std::vector;
+#include <algorithm>
+
+//Compares the areas of two shapes.  This function is for 
+//the "sort()" function to use to compare the vector elements
+bool compPerimeters(TwoDShape* left, TwoDShape* right)
+{
+    return left->getPerimeter() < right->getPerimeter();
+}
+
+int main()
+{
+    vector<TwoDShape*> ShapeSet(0);
+    // the "push_back()" function adds an element 
+    // to the read of the vector
+    ShapeSet.push_back(new Circle(1));
+    ShapeSet.push_back(new Square(1));
+    ShapeSet.push_back(new EqTriangle(1));  // <-- add EqTriangle object
+    ShapeSet.push_back(new Circle(2));
+    ShapeSet.push_back(new EqTriangle(1.75));
+
+    cout << "The unsorted shapes are as follows:" << endl;
+    for (size_t i = 1; i <= ShapeSet.size(); i++) {
+        cout << "(" << i << ") " << ShapeSet[i - 1]->getName()
+            << " with perimeter " << ShapeSet[i - 1]->getPerimeter() << endl;
+    }
+
+    //Now sort the vector's elements
+    sort(ShapeSet.begin(), ShapeSet.end(), compPerimeters);
+
+    cout << endl << "The shape list, sorted by perimeter, is as follows:" << endl;
+    for (size_t i = 1; i <= ShapeSet.size(); i++) {
+        cout << "(" << i << ") " << ShapeSet[i - 1]->getName()
+            << " with perimeter " << ShapeSet[i - 1]->getPerimeter() << endl;
+    }
+
+    return 0;
+}
+
