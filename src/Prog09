@@ -1,0 +1,102 @@
+// Header File 1
+
+//John Braman
+//Prog09
+//COSC 1030 Section 11
+//March 31 2023
+
+#ifndef DISPLAYARRAY_H
+#define DISPLAYARRAY_H
+
+template<typename A>
+void DisplayArray(const A data[], int arraySize)
+{
+    for (int i = 0; i < arraySize; i++) {
+        cout << data[i] << "    ";
+    }
+}
+#endif
+
+// Header File 2
+
+#ifndef LLPARAMS_H
+
+#define LLPARAMS_H
+
+void LLParams(const double x[], // Array of x values
+
+	const double y[], // Array of y values
+
+	int n, // Length of input arrays
+
+	double& m, // Linear least square slope of line fit
+
+	double& b); // Linear least square y-intercept
+
+#endif
+
+
+// Source Code 1
+
+//John Braman
+//Prog09
+//COSC 1030 Section 11
+//March 31 2023
+
+// LLParams.cpp
+
+#include "Params.h"
+
+void LLParams(const double x[], const double y[], int n, double& m, double& b) {
+
+	double sumx = 0, sumy = 0, sumxsq = 0, sumysq = 0, prodxy = 0;
+	for (int i = 0; i < n; i++) {
+		sumx = sumx + x[i];
+		sumy = sumy + y[i];
+		sumxsq = sumxsq + (x[i] * x[i]);
+		prodxy = prodxy + x[i] * y[i];
+	}
+	m = (n * prodxy - sumx * sumy) / (n * sumxsq - (sumx * sumx));
+	b = (sumy - m * sumx) / n;
+}
+
+// Source Code 2
+
+//John Braman
+//Prog09
+//COSC 1030 Section 11
+//March 31 2023
+
+#include <iostream>
+using std::cout;
+using std::endl;
+
+#include "Params.h"
+#include "DisplayArray.hpp"
+
+
+int main()
+{
+	double xData[] = { 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0 };
+	double yData[] = { -4.5, 4.0, 8.5, 16.0, 32.5, 64.0, 128.5 };
+
+	int dataSize = 7;
+
+	double m, b;
+
+	LLParams(xData, yData, dataSize, m, b);
+
+	cout << "The x data set: " << endl;
+	DisplayArray(xData, dataSize);
+	cout << endl;
+
+	cout << "the y data set: " << endl;
+	DisplayArray(yData, dataSize);
+	cout << endl;
+
+	cout << "The linear least square parameters are as follows:" << endl;
+	cout << "  m = " << m << endl;
+	cout << "  b = " << b << endl;
+
+	return 0;
+}
