@@ -1,0 +1,84 @@
+// Header File
+
+#ifndef _POLY_H
+#define _POLY_H
+#include <iostream>
+using std::ostream;
+using std::istream;
+#include <vector>
+using std::vector;
+
+class Polynomial {
+public:
+
+	Polynomial();
+	Polynomial(int deg, const vector<double> coefficients);
+	Polynomial(const Polynomial&);
+	~Polynomial();
+	const Polynomial& operator=(const Polynomial&);
+	bool operator==(const Polynomial&) const;
+	double operator[](int index) const;
+	double& operator[](int index);
+	int getDegree() const;
+	friend ostream& operator<<(ostream&, const Polynomial&);
+	friend istream& operator>>(istream&, Polynomial&);
+
+private:
+
+	vector<double> coeffs;
+	int degree;
+
+};
+
+// Beware! Very incomplete!
+ostream& operator<<(ostream&, const Polynomial&);
+istream& operator>>(istream&, Polynomial&);
+
+#endif
+
+// Source Code
+
+#include <iostream>
+using std::cout;
+using std::endl;
+using std::cin;
+
+#include "Polynomial.hpp"
+
+int main()
+{
+	Polynomial A;
+	cout << "(1) Testing `cout << A':  " << A << endl;
+
+	cout << "(2) Testing `cin >> A':\n";
+	cout << "Enter the polynomial (integer order then double coefficients):\n\t ";
+	cin >> A;
+	cout << endl;
+	cout << "(3) Second look at A:  " << A << endl;
+
+	Polynomial B(A);
+	cout << "(4) Testing `Polynomial B(A)':  " << B << endl;
+
+	vector<double> clist;
+	clist.push_back(8);
+	clist.push_back(4.5);
+	clist.push_back(1);
+	Polynomial C(2, clist);
+	cout << "(5) Testing `Polynomial C(2, clist)':  " << C << endl;
+
+	Polynomial D = C;
+	cout << "(6) Testing D = C):  " << D << endl;
+
+	cout << "(7) Testing A == B :  " << (A == B ? "TRUE" : "FALSE") << endl;
+	cout << "(8) Testing A == D :  " << (A == D ? "TRUE" : "FALSE") << endl;
+
+	Polynomial E = C;
+	cout << "(9) Testing E = C by printing E: " << E << endl;
+	cout << "(10) Testing E == C : " << (E == C ? "TRUE" : "FALSE") << endl;
+	cout << "(11) Testing the degree of the polynomial: " << E.getDegree() << endl;
+	cout << "(12) Testing the other degree of the polynomial: " << E[E.getDegree()] << endl;
+	return 0;
+}
+
+// TestThePoly.cpp "was not found"
+
